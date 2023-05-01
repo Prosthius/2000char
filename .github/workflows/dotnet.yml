@@ -41,9 +41,6 @@ jobs:
       - name: Publish for Linux x64 (Self Contained)
         run: dotnet publish -c Release -r linux-x64 -o out/linux-x64-self-contained --self-contained true /p:PublishSingleFile=true
 
-      - name: List contents of out directory
-        run: ls -al out/win-x64-self-contained
-
       - name: Zip files
         run: |
           cd ${{ github.workspace }}/out/win-x64
