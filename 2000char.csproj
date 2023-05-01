@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>_2000char</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" CopyToPublishDirectory="Always" />
+  </ItemGroup>
+  <Target Name="CreateOutputFolder" AfterTargets="Publish">
+    <MakeDir Directories="$(PublishDir)output" />
+  </Target>
+  <Target Name="CreateInputFile" AfterTargets="Publish">
+    <WriteLinesToFile File="$(PublishDir)input/input.txt" Lines="" Overwrite="true" />
+  </Target>
+</Project>
