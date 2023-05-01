@@ -44,12 +44,12 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: mindsers/create-release@v1
+        uses: actions/create-release@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # or ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: v${{ env.RELEASE_VERSION }}
-          release_name: Release v${{ env.RELEASE_VERSION }}
+          tag_name: 1.0
+          release_name: 1.0
           draft: false
           prerelease: false
 
