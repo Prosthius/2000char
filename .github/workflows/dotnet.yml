@@ -31,16 +31,29 @@ jobs:
 
       - name: Publish for Windows x64
         run: dotnet publish -c Release -r win-x64 -o out/win-x64 --self-contained false /p:PublishSingleFile=true
+        
+      - name: Publish for Windows x64 (Self Contained)
+        run: dotnet publish -c Release -r win-x64 -o out/win-x64-self-contained --self-contained true /p:PublishSingleFile=true
 
       - name: Publish for Linux x64
         run: dotnet publish -c Release -r linux-x64 -o out/linux-x64 --self-contained false /p:PublishSingleFile=true
+        
+      - name: Publish for Linux x64 (Self Contained)
+        run: dotnet publish -c Release -r linux-x64 -o out/linux-x64-self-contained --self-contained true /p:PublishSingleFile=true
 
       - name: Zip files
         run: |
           cd out/win-x64
           zip -r ../win-x64.zip *
+          
+          cd out/win-x64-self-contained
+          zip -r ../win-x64-self-contained.zip *
+          
           cd ../linux-x64
           zip -r ../linux-x64.zip *
+          
+          cd out/linux-x64-self-contained
+          zip -r ../linux-x64-self-contained.zip *
 
       - name: Create Release
         id: create_release
@@ -48,8 +61,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_RELEASE }}
         with:
-          tag_name: 1.0
-          release_name: 1.0
+          tag_name: '1.0'
+          release_name: '1.0'
           draft: false
           prerelease: false
 
@@ -62,6 +75,16 @@ jobs:
           asset_path: out/win-x64.zip
           asset_name: win-x64.zip
           asset_content_type: application/zip
+          
+      - name: Upload Release Asset for Windows x64 (Self-contained)
+        uses: actions/upload-release-asset@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: out/win-x64-self-contained.zip
+          asset_name: win-x64-self-contained.zip
+          asset_content_type: application/zip
 
       - name: Upload Release Asset for Linux x64
         uses: actions/upload-release-asset@latest
@@ -71,4 +94,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: out/linux-x64.zip
           asset_name: linux-x64.zip
+          asset_content_type: application/zip
+          
+      - name: Upload Release Asset for Linux x64 (Self-contained)
+        uses: actions/upload-release-asset@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_RELEASE }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: out/linux-x64-self-contained.zip
+          asset_name: linux-x64-self-contained.zip
           asset_content_type: application/zip
