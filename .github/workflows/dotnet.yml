@@ -46,17 +46,17 @@ jobs:
 
       - name: Zip files
         run: |
-          cd out/win-x64
-          zip -r ../win-x64.zip *
-          
-          cd ../linux-x64
-          zip -r ../linux-x64.zip *
-          
-          cd out/win-x64-self-contained
-          zip -r ../win-x64-self-contained.zip *
-          
-          cd out/linux-x64-self-contained
-          zip -r ../linux-x64-self-contained.zip *
+          cd ${{ github.workspace }}/out/win-x64
+          zip -r ${{ github.workspace }}/out/win-x64.zip *
+
+          cd ${{ github.workspace }}/out/linux-x64
+          zip -r ${{ github.workspace }}/out/linux-x64.zip *
+
+          cd ${{ github.workspace }}/out/win-x64-self-contained
+          zip -r ${{ github.workspace }}/out/win-x64-self-contained.zip *
+
+          cd ${{ github.workspace }}/out/linux-x64-self-contained
+          zip -r ${{ github.workspace }}/out/linux-x64-self-contained.zip *
 
       - name: Create Release
         id: create_release
