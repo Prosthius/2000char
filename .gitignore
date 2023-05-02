@@ -1,5 +1,4 @@
-input/*
-output/*
+output/output*
 .vscode
 bin
 obj
