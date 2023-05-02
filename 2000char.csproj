@@ -8,6 +8,7 @@
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+    <PublishDir>./build</PublishDir>
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" CopyToPublishDirectory="Always" />

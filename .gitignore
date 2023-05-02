@@ -2,3 +2,4 @@ output/output*
 .vscode
 bin
 obj
+build
