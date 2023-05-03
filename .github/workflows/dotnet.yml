@@ -43,17 +43,11 @@ jobs:
 
       - name: Zip files
         run: |
-          cd ${{ github.workspace }}/out/win-x64
-          zip -r ${{ github.workspace }}/out/win-x64.zip *
-
-          cd ${{ github.workspace }}/out/linux-x64
-          zip -r ${{ github.workspace }}/out/linux-x64.zip *
-
-          cd ${{ github.workspace }}/out/win-x64-self-contained
-          zip -r ${{ github.workspace }}/out/win-x64-self-contained.zip *
-
-          cd ${{ github.workspace }}/out/linux-x64-self-contained
-          zip -r ${{ github.workspace }}/out/linux-x64-self-contained.zip *
+          cd ${{ github.workspace }}/out
+          zip -r win-x64.zip win-x64
+          zip -r linux-x64.zip linux-x64
+          zip -r win-x64-self-contained.zip win-x64-self-contained
+          zip -r linux-x64-self-contained.zip linux-x64-self-contained
 
       - name: Get next release number
         id: next_release
