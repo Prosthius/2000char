@@ -1,25 +1,64 @@
 ﻿using System.Text;
 
 string input;
-int i = 1;
+int characterLength = 2000;
+string help =
+    @"Usage:
+    ./LLM-Char [-c | --characters]
+    ./LLM-Char [-h | --help]
+    ./LLM-Char [-d | --delete]
+    
+Options:
+    -h --help:          Show this screen
+    -d --delete:        Delete all output files
+    -c --characters:    Set the number of characters per output file (default: 2000)";
 
 try
 {
+    for (int i = 0; i < args.Length; i++)
+    {
+        switch (args[i])
+        {
+            case "-h":
+            case "--help":
+                Console.WriteLine(help);
+                Environment.Exit(0);
+                break;
+            case "-d":
+            case "--delete":
+                clearOutputFiles();
+                break;
+            case "-c":
+            case "--characters":
+                i++;
+                characterLength = int.Parse(args[i]);
+                break;
+            default:
+                Console.WriteLine("Invalid argument: " + args[i] + "\nRun with -h or --help for help.");
+                Environment.Exit(1);
+                break;
+        }
+    }
     Console.WriteLine("Running...");
 
     input = File.ReadAllText("./input/input.txt");
-    if (input == "") clearOutputFiles();
-
-    List<string>? output = SplitString(input, 2000);
-
-    if (output == null) throw new Exception("Output text is null");
-
-    foreach (string block in output)
+    if (input == null || input == "")
     {
-        File.WriteAllText($"./output/output{i}.txt", block);
-        i++;
+        Console.WriteLine("Input file is empty.");
+        Environment.Exit(0);
     }
-    Console.WriteLine("Done! \nTo delete all output files, delete all text from input.txt and run the program again.");
+
+    List<string>? output = SplitString(input, characterLength);
+
+    if (output == null) throw new Exception("Output is null.");
+
+    for (int i = 0; i < output.Count; i++)
+    {
+        string block = output[i];
+        File.WriteAllText($"./output/output{i + 1}.txt", block);
+    }
+
+    Console.WriteLine("Done! \nTo delete all output files, run the program with the -d or --delete flag.");
 }
 catch (FileNotFoundException)
 {
@@ -59,17 +98,6 @@ void clearOutputFiles()
 {
     try
     {
-        char response = 'n';
-
-        Console.Write("input.txt is empty. Do you want to delete the contents of the output folder? (y/N): ");
-        response = char.ToLower(Console.ReadKey().KeyChar);
-        Console.WriteLine();
-        if (response != 'y')
-        {
-            Console.WriteLine("Files were not modified.\nExiting...");
-            Environment.Exit(1);
-        }
-
         string[] files = Directory.GetFiles("./output");
         foreach (string file in files)
         {
@@ -80,7 +108,7 @@ void clearOutputFiles()
             }
         }
         Console.WriteLine("Cleared output files.");
-        Environment.Exit(1);
+        Environment.Exit(0);
     }
     catch (Exception error)
     {
