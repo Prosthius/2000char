@@ -1,4 +1,4 @@
-### Paste the text into ./input/input.txt, the text will be output into several files in ./output, each consisting of up to a user specified number of characters, including whitespace.
+### Paste text into ./input/input.txt, the text will be output into several files in ./output, each consisting of up to a user specified number of characters, including whitespace.
 
 <ul>Choose the self-contained package if you do not have dotnet 7 installed.</ul>
 
