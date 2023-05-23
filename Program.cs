@@ -4,17 +4,29 @@ string input;
 int characterLength = 2000;
 string help =
     @"Usage:
-    ./LLM-Char [-c | --characters]
+    ./LLM-Char [-c | --characters] [-nw | --no-whitespace] [-rc | --remove-char]
     ./LLM-Char [-h | --help]
     ./LLM-Char [-d | --delete]
+    ./LLM-Char [-v | --version]
     
 Options:
-    -h --help:          Show this screen
-    -d --delete:        Delete all output files
-    -c --characters:    Set the number of characters per output file (default: 2000)";
+    -h  --help:             Show this screen
+    -v  --version:          Show version
+    -d  --delete:           Delete all output files that match 'output*.txt'
+    -c  --characters:       Set the number of characters per output file (default: 2000)
+    -nw --no-whitespace:    Remove all whitespace from the input text
+    -rc --remove-char:      Remove all instances of a character from the input text"; // TODO - allow multiple characters e.g. -rc , / -
+                                                                                      // TODO - --version
 
 try
 {
+    input = File.ReadAllText("./input/input.txt");
+    if (input == null || input == "")
+    {
+        Console.WriteLine("Input file is empty.");
+        Environment.Exit(1);
+    }
+
     for (int i = 0; i < args.Length; i++)
     {
         switch (args[i])
@@ -27,11 +39,26 @@ try
             case "-d":
             case "--delete":
                 clearOutputFiles();
+                Console.WriteLine("Cleared output files.");
+                Environment.Exit(0);
+                break;
+            case "-v":
+            case "--version":
+                // TODO
                 break;
             case "-c":
             case "--characters":
                 i++;
                 characterLength = int.Parse(args[i]);
+                break;
+            case "-nw":
+            case "--no-whitespace":
+                input = removeWhitespace(input);
+                break;
+            case "-rc":
+            case "--remove-char":
+                i++;
+                input = removeChar(input, Char.Parse(args[i]));
                 break;
             default:
                 Console.WriteLine("Invalid argument: " + args[i] + "\nRun with -h or --help for help.");
@@ -41,16 +68,11 @@ try
     }
     Console.WriteLine("Running...");
 
-    input = File.ReadAllText("./input/input.txt");
-    if (input == null || input == "")
-    {
-        Console.WriteLine("Input file is empty.");
-        Environment.Exit(0);
-    }
-
     List<string>? output = SplitString(input, characterLength);
 
     if (output == null) throw new Exception("Output is null.");
+
+    clearOutputFiles();
 
     for (int i = 0; i < output.Count; i++)
     {
@@ -88,27 +110,44 @@ List<string>? SplitString(string inputStr, int charLength)
     }
     catch (Exception error)
     {
-        Console.WriteLine("Error: " + error.Message);
+        Console.WriteLine("\nError: " + error.Message + "\n" + error.StackTrace);
         Environment.Exit(1);
         return null;
     }
+}
+
+string removeWhitespace(string inputStr)
+{
+    string output = "";
+    StringBuilder sb = new StringBuilder();
+    foreach (char c in inputStr)
+    {
+        if (!char.IsWhiteSpace(c)) sb.Append(c);
+    }
+    output = sb.ToString();
+    sb.Clear();
+    return output;
+}
+
+string removeChar(string inputStr, char charToRemove)
+{
+    string output = "";
+    StringBuilder sb = new StringBuilder();
+    foreach (char c in inputStr)
+    {
+        if (c != charToRemove) sb.Append(c);
+    }
+    output = sb.ToString();
+    sb.Clear();
+    return output;
 }
 
 void clearOutputFiles()
 {
     try
     {
-        string[] files = Directory.GetFiles("./output");
-        foreach (string file in files)
-        {
-            // Prevents hidden files from being deleted
-            if ((File.GetAttributes(file) & FileAttributes.Hidden) != FileAttributes.Hidden)
-            {
-                File.Delete(file);
-            }
-        }
-        Console.WriteLine("Cleared output files.");
-        Environment.Exit(0);
+        string[] files = Directory.GetFiles("./output", "output*.txt");
+        foreach (string file in files) File.Delete(file);
     }
     catch (Exception error)
     {
