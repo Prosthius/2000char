@@ -9,12 +9,12 @@
     
 # Options:
     -h  --help:             Show this screen
-    -v  --version:          Show version
+    -v  --version:          Show the version number
     -d  --delete:           Delete all output files that match 'output*.txt'
     -c  --characters:       Set the number of characters per output file (default: 2000)
     -nw --no-whitespace:    Remove all whitespace from the input text
-    -rc --remove-char:      Remove all instances of a character from the input text
+    -rc --remove-char:      Remove all instances of a character from the input text. Supports inputting multiple characters one after the other
 
 # Examples:
-    # Output 1000 characters per file and remove all whitespace and commas 
-    ./LLM-Char -c 1000 -nw -rc , 
+    # Output 1000 characters per file and remove all whitespace, commas and periods
+    ./LLM-Char -c 1000 -nw -rc ,.

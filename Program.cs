@@ -1,5 +1,6 @@
 ﻿using System.Text;
 
+string version = "v2.0";
 string input;
 int characterLength = 2000;
 string help =
@@ -11,12 +12,11 @@ string help =
     
 Options:
     -h  --help:             Show this screen
-    -v  --version:          Show version
+    -v  --version:          Show the version number
     -d  --delete:           Delete all output files that match 'output*.txt'
     -c  --characters:       Set the number of characters per output file (default: 2000)
     -nw --no-whitespace:    Remove all whitespace from the input text
-    -rc --remove-char:      Remove all instances of a character from the input text"; // TODO - allow multiple characters e.g. -rc , / -
-                                                                                      // TODO - --version
+    -rc --remove-char:      Remove all instances of a character from the input text. Supports inputting multiple characters one after the other";
 
 try
 {
@@ -44,7 +44,8 @@ try
                 break;
             case "-v":
             case "--version":
-                // TODO
+                Console.WriteLine(version);
+                Environment.Exit(0);
                 break;
             case "-c":
             case "--characters":
@@ -58,7 +59,16 @@ try
             case "-rc":
             case "--remove-char":
                 i++;
-                input = removeChar(input, Char.Parse(args[i]));
+                char[] argsArr = args[i].ToCharArray();
+                foreach (char c in argsArr)
+                {
+                    input = removeChar(input, c.ToString());
+                }
+                break;
+            case "-rcs":
+            case "--remove-chars":
+                i++;
+                input = removeChar(input, args[i]); // TODO - function checks each character individually
                 break;
             default:
                 Console.WriteLine("Invalid argument: " + args[i] + "\nRun with -h or --help for help.");
@@ -129,14 +139,17 @@ string removeWhitespace(string inputStr)
     return output;
 }
 
-string removeChar(string inputStr, char charToRemove)
+string removeChar(string inputStr, string charToRemove)
 {
     string output = "";
+    int charsToRemoveLength = charToRemove.Length;
     StringBuilder sb = new StringBuilder();
-    foreach (char c in inputStr)
+    foreach (char input in inputStr)
     {
-        if (c != charToRemove) sb.Append(c);
+        // Need to check characters based on charToRemove.Length. e.g. check input[0] + input[1], input[1] + input[2], etc.
+        if (input.ToString() != charToRemove) sb.Append(input);
     }
+
     output = sb.ToString();
     sb.Clear();
     return output;
