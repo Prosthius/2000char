@@ -1,6 +1,8 @@
 ### Paste text into ./input/input.txt, the text will be output into several files in ./output, each consisting of up to a user specified number of characters, including whitespace.
 
-<ul>Choose the self-contained package if you do not have dotnet 7 installed.</ul>
+# Packages
+- **Self Contained:** Includes the Dotnet 7 runtime in the package
+- **Not Self Contained:** Requires installing the Dotnet 7 runtime separately
 
 # Usage:
     ./LLM-Char [-c | --characters] [-nw | --no-whitespace] [-rc | --remove-char]
